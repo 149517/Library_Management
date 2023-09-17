@@ -30,6 +30,7 @@ def borrow_view(request):
         isbn = request.data.get('isbn')
         type = request.data.get('type')
         user_id = request.user.id  # 从令牌中解析出user_id
+        print(isbn,type,user_id)
 
         # 在Book模型中查找具有匹配ISBN的书籍记录
         try:

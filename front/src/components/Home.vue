@@ -53,10 +53,17 @@ $bgColor: #ECFBFB;
   .tit {
     padding-top: 50px;
     color: $aColor;
+    animation: leftIn .5s ease-in forwards;
     font: {
       size: 50px;
       weight: bold;
     }
+  }
+
+  .des{
+    opacity: 0;
+    animation: downIn .5s ease-in forwards;
+    animation-delay: .6s;
   }
 
   div {
@@ -77,20 +84,13 @@ $bgColor: #ECFBFB;
 
     .middle {
       transition: all .4s ease;
-      transform: scale(1.2);
+      animation: upMove .5s linear forwards;
+      &:hover{
+        transform: scale(1.1);
+      }
     }
   }
 
-  .image:hover .middle {
-    transform: scale(1);
-  }
-
-  .image:hover .right {
-    transform: scale(1.1);
-  }
-  .image:hover .left {
-    transform: scale(1.1);
-  }
 
 }
 

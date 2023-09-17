@@ -14,11 +14,7 @@ export default {
         },
         {
           id: 2,
-<<<<<<< HEAD
           name: "热门必读",
-=======
-          name: "书目",
->>>>>>> 326b59aa53e211a6e29b8a033e45707b234981e4
           href: "/bookList"
         },
         {
@@ -29,23 +25,9 @@ export default {
         {
           id: 4,
           name: "查询和申报",
-<<<<<<< HEAD
+
           href: "/table"
         },
-        // {
-        //   id: 5,
-        //   name: "书籍购买",
-        //   href: "/buyBook"
-        // },
-=======
-          href: "#"
-        },
-        {
-          id: 5,
-          name: "书籍购买",
-          href: "#"
-        },
->>>>>>> 326b59aa53e211a6e29b8a033e45707b234981e4
       ]
     }
   },
@@ -212,14 +194,5 @@ $bgColor: #ECFBFB;
   }
 }
 
-@keyframes leftIn {
-  0% {
-    transform: translateX(-100%);
-    opacity: 0;
-  }
-  100% {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
+
 </style>

@@ -4,16 +4,12 @@ import {createStore} from 'vuex'
 const store = createStore({
     state() {
         return {
-            // baseUrl: "http://127.0.0.1:8000"
-            baseUrl: "http://localhost:8000",
+            baseUrl: "http://127.0.0.1:8000",
+            // baseUrl: "http://localhost:8000",
             name:"",
-<<<<<<< HEAD
             picUrl:"",
             borrowStatus:true,
             buyStatus:true,
-=======
-            picUrl:""
->>>>>>> 326b59aa53e211a6e29b8a033e45707b234981e4
         }
     },
     mutations: {
@@ -22,15 +18,12 @@ const store = createStore({
         },
         setPicUrl(state,value){
             state.picUrl = value
-<<<<<<< HEAD
         },
         setBorrStatus(state,value){
             state.borrowStatus = value
         },
         setBuyStatus(state,value){
             state.buyStatus = value
-=======
->>>>>>> 326b59aa53e211a6e29b8a033e45707b234981e4
         }
     }
 })

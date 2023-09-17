@@ -2,11 +2,10 @@
 // import Vue from 'vue'
 
 import {mapState} from "vuex";
-<<<<<<< HEAD
+
 import axios from "axios";
-=======
-import axios, {formToJSON, toFormData} from "axios";
->>>>>>> 326b59aa53e211a6e29b8a033e45707b234981e4
+
+
 
 export default {
   computed: {
@@ -30,15 +29,9 @@ export default {
   },
   methods: {
     clear() {
-<<<<<<< HEAD
       this.uname = '';
       this.password = '';
       this.password2 = ''
-=======
-      // this.uname = '';
-      // this.password = '';
-      // this.password2 = ''
->>>>>>> 326b59aa53e211a6e29b8a033e45707b234981e4
     },
     Jump() {
       this.login = !this.login;
@@ -89,13 +82,13 @@ export default {
     axiosLogin(url, formData) {
       axios
           // .post(url, formData, {withCredentials: true})
-          .post(url,formData)
+          .post(url, formData)
           .then(res => {
-<<<<<<< HEAD
+
             // console.log(res.data)
-=======
+
             console.log(res.data)
->>>>>>> 326b59aa53e211a6e29b8a033e45707b234981e4
+
             if (res.data.code === 200) {
               localStorage.setItem('token', res.data.token);
               localStorage.setItem('pic', res.data.pic)
@@ -111,32 +104,32 @@ export default {
           })
     },
     axiosRegister(url, formData) {
-<<<<<<< HEAD
+
       // console.log(url,formData)
       axios
           .post(url, formData)
-          .then(res => {
+          .then((res) => {
             // console.log(res)
-            if (res.data.code === 201)
-            {
-=======
-      axios
-          .post(url, formData)
-          .then(res => {
             if (res.data.code === 201) {
->>>>>>> 326b59aa53e211a6e29b8a033e45707b234981e4
-              if (confirm(res.data.msg + "，是否直接登录")) {
-                this.submitForm('login')
-              } else {
-                this.clear();
-                this.login = false;
-              }
-            } else {
-              alert(res.data.msg)
+              axios
+                  .post(url, formData)
+                  .then(res => {
+                    if (res.data.code === 201) {
+
+                      if (confirm(res.data.msg + "，是否直接登录")) {
+                        this.submitForm('login')
+                      } else {
+                        this.clear();
+                        this.login = false;
+                      }
+                    } else {
+                      alert(res.data.msg)
+                    }
+                  })
+                  .catch(err => {
+                    console.log("数据提交失败" + err)
+                  })
             }
-          })
-          .catch(err => {
-            console.log("数据提交失败" + err)
           })
     }
   },
@@ -191,11 +184,9 @@ export default {
             <h2 v-if="login">用户登录</h2>
             <h2 v-else>注册新用户</h2>
           </div>
-<<<<<<< HEAD
+
           <form :action="this.baseUrl+'/user/login/'" ref="login" method="post" v-if="login"
-=======
-          <form :action="baseUrl+'/user/login/'" ref="login" method="post" v-if="login"
->>>>>>> 326b59aa53e211a6e29b8a033e45707b234981e4
+
                 @submit.prevent="check('login')">
             <div class="box">
               <label>
@@ -218,11 +209,9 @@ export default {
               <button id="submit" type="submit">登录</button>
             </label>
           </form>
-<<<<<<< HEAD
+
           <form :action="this.baseUrl+'/user/register/'" ref="register" method="post" v-else
-=======
-          <form :action="baseUrl+'/user/register/'" ref="register" method="post" v-else
->>>>>>> 326b59aa53e211a6e29b8a033e45707b234981e4
+
                 @submit.prevent="check('register')">
             <div class="box">
               <label>
@@ -267,18 +256,22 @@ $btnColor: #38B081;
 $bgColor: #ECFBFB;
 
 .container {
-  width: 100%;
-  height: 100vh;
-  background: #9bdec9;
+  //width: 100%;
+  //height: calc(100vh - 80px);
+  ////background: #9bdec9;
+  //position: relative;
+  //top: 0;
+  //left: 0;
 }
 
 .mid {
   position: absolute;
   top: 50%;
   left: 50%;
+  margin-top: 30px;
   display: flex;
   width: 1200px;
-  height: 600px;
+  height: 520px;
   background: $bgColor;
   //box-shadow: 1px 1px 10px rgb(128, 128, 128);
   border-radius: 20px;
@@ -288,8 +281,14 @@ $bgColor: #ECFBFB;
 }
 
 .res_mid {
-  height: 700px;
+  height: 620px;
   transition: all .5s linear;
+  .right{
+    .login_bg{
+      height: 480px;
+    }
+  }
+
 }
 
 .left {
@@ -313,11 +312,12 @@ $bgColor: #ECFBFB;
 
   .login_bg {
     width: 400px;
-    height: 500px;
-    padding: 30px;
+    height: 420px;
+    padding: 30px 30px 0;
     background: rgb(248, 248, 248, 0.6);
     box-shadow: -6px 6px 20px 1px #d2eff1;
     border-radius: 20px;
+    transition: all .5s linear;
 
     .top {
       .head {
@@ -411,14 +411,5 @@ $bgColor: #ECFBFB;
   }
 }
 
-@keyframes upMove {
-  0% {
-    opacity: 0;
-    transform: translateY(50px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+
 </style>

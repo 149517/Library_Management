@@ -1,26 +1,12 @@
 from books.models import Book
 from django.core import serializers
 from django.core.paginator import Paginator
-<<<<<<< HEAD
-from django.http import JsonResponse, HttpResponse
-=======
+
 from django.http import JsonResponse
->>>>>>> 326b59aa53e211a6e29b8a033e45707b234981e4
+
 import json
 
 
-# def all_view(request):
-#     """
-#     :param request: None
-#     :return: books[]
-#     """
-#     if request.method == 'GET':
-#         books = list(Book.objects.all().values())
-#         data = {
-#             'code': 200,
-#             'books': books
-#         }
-#         return JsonResponse(data, safe=False, json_dumps_params={'ensure_ascii': False})
 def all_view(request):
     books = Book.objects.all()
     paginator = Paginator(books, 4)
@@ -43,13 +29,19 @@ def all_view(request):
     }
 
     return JsonResponse({"data": data, "pagination_info": pagination_info}, safe=False)
-<<<<<<< HEAD
 
 
 def query_view(request):
+
+    # 书籍查询，
+    # 参数：
+    # name
+    # 书籍的某个信息
+    # way
+    # 书籍信息参数
     name = request.POST.get('name')
     way = request.POST.get('way')
-    print(name,way)
+    # print(name, way)
 
     if way == 'bookname':
         books = Book.objects.filter(bookname=name)
@@ -66,8 +58,5 @@ def query_view(request):
     book_data = serializers.serialize('json', books)
     book_data = json.loads(book_data)
 
-
     # 使用JsonResponse返回数据
     return JsonResponse({'books': book_data}, safe=False)
-=======
->>>>>>> 326b59aa53e211a6e29b8a033e45707b234981e4

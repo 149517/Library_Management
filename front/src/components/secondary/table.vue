@@ -13,7 +13,7 @@ export default {
         book: {
           title: '',
           author: '',
-          price: 0,
+          price: '',
           publisher: '',
           isbn: ''
         }
@@ -48,8 +48,8 @@ export default {
       axios
           .post(url, formData)
           .then((res) => {
-            console.log(res.data)
-            console.log(res.data.records)
+            // console.log(res.data)
+            // console.log(res.data.records)
             this.borrowData = res.data.records
           })
           .catch((err) => {
@@ -69,7 +69,7 @@ export default {
       <div class="block bg">
         <h2 :class="{'active':borrow}" @click="toggle('borrow')">我的借阅</h2>
         <h2 :class="{'active':buy}" @click="toggle('buy')">购书记录</h2>
-        <h2 :class="{'active':fix}" @click="toggle('fix')">错误申报</h2>
+        <h2 :class="{'active':fix}" @click="toggle('fix')">错误修订</h2>
       </div>
 
     </div>

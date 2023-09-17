@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <script>
 import {mapState} from "vuex";
 import axios from "axios";
@@ -62,6 +61,11 @@ export default {
   ,
   methods: {
     check() {
+      /**
+       * 书籍检索
+       * way 检索的方式，作者，书名，，，
+       * name 书籍的信息
+       * */
       const url = this.baseUrl + '/books/query/';
       let data = new FormData();
       let index = this.$refs.sel.selectedIndex
@@ -93,7 +97,14 @@ export default {
 
     },
     add(book, type) {
-      console.log(book)
+      /**
+       * 通过用户操作添加到书籍为当前用户的记录（借入或者购买）
+       *
+       * 参数：
+       * book 书籍的ISBN
+       * type 借书或者是购买
+       * */
+      // console.log(book)
       const url = this.baseUrl + '/record/borrow/'
       let formData = new FormData()
       formData.append('isbn', book);
@@ -119,16 +130,13 @@ export default {
     }
   }
 }
-=======
-<script setup>
 
->>>>>>> 326b59aa53e211a6e29b8a033e45707b234981e4
 </script>
 
 <template>
   <div class="container">
     <div class="bg">
-<<<<<<< HEAD
+
       <div class="box">
         <form :action="this.baseUrl+'books/query/'" method="post" @submit.prevent="check">
           <p>
@@ -180,33 +188,32 @@ export default {
         </div>
 
       </div>
-=======
-      <h2>图书借阅</h2>
->>>>>>> 326b59aa53e211a6e29b8a033e45707b234981e4
+
+
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
-<<<<<<< HEAD
+
 // 颜色变量
-=======
->>>>>>> 326b59aa53e211a6e29b8a033e45707b234981e4
+
+
 $aColor: #1A535E;
 $btnColor: #38B081;
 $bgColor: #ECFBFB;
 
-<<<<<<< HEAD
+
 // 公共背景样式
-=======
->>>>>>> 326b59aa53e211a6e29b8a033e45707b234981e4
+
+
 .bg {
   background: $bgColor;
   border-radius: 20px;
   padding: 60px 100px;
 }
 
-<<<<<<< HEAD
+
 // 标题样式
 h2 {
   margin-bottom: 30px;
@@ -241,7 +248,8 @@ h2 {
     font-size: 16px;
 
     &[disabled] {
-      background: #eeaaaa;
+      background: #e8e8e8;
+      color: #000;
     }
   }
 }
@@ -338,6 +346,6 @@ h2 {
 
   }
 }
-=======
->>>>>>> 326b59aa53e211a6e29b8a033e45707b234981e4
+
+
 </style>

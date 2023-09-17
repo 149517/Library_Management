@@ -4,13 +4,8 @@ from django.contrib.auth import authenticate, login
 from django.http import JsonResponse
 
 from rest_framework.authtoken.models import Token
-<<<<<<< HEAD
+
 from rest_framework.decorators import api_view
-=======
-from rest_framework.decorators import api_view, permission_classes
->>>>>>> 326b59aa53e211a6e29b8a033e45707b234981e4
-from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
 
 
 @api_view(['POST'])

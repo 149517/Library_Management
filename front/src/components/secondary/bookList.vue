@@ -45,32 +45,38 @@ export default {
             console.log("数据请求失败" + err)
           })
     },
-    fixPage(type){
-      // console.log(type)
-      // console.log(this.page)
-      if(type === 'up'){
-        if(this.page === 1){
+    fixPage(type) {
+      console.log(type)
+      console.log(this.page)
+      if (type === 'up') {
+        if (this.page === 1) {
           return false
-        }else {
-          this.page = this.page -1
+        } else {
+          this.page = this.page - 1
         }
-      }else if(type === 'down'){
-<<<<<<< HEAD
-        if(this.page === this.pagination_info.total_pages){
-=======
-        if(this.page === 3){
->>>>>>> 326b59aa53e211a6e29b8a033e45707b234981e4
-          return false
-        }else {
-          this.page = this.page + 1
+      } else if (type === 'down') {
+
+        if (this.page === this.pagination_info.total_pages) {
+
+          if (this.page === 3) {
+            return false
+          } else {
+            this.page = this.page + 1
+          }
         }
-      }else{
+      } else {
         this.page = type
       }
+
+    },
+    open(item){
+      // console.log(item)
+      let isbn = item.fields.isbn
+      this.$router.push(`/details/?isbn=${isbn}`)
     }
   },
-  watch:{
-    page(newValue){
+  watch: {
+    page(newValue) {
       this.getBooks()
     }
   },
@@ -80,6 +86,7 @@ export default {
   mounted() {
     this.getBooks()
   }
+
 }
 </script>
 
@@ -87,7 +94,7 @@ export default {
   <div class="container">
     <div class="bg">
       <div class="box">
-        <div class="line" v-for="item in books" key="item.id">
+        <div class="line" v-for="item in books" key="item.id" @click="open(item)">
           <img :src="item.fields.pic" :alt="item.fields.bookname">
           <div class="text">
             <div class="name">{{ item.fields.bookname }}</div>
@@ -130,14 +137,14 @@ $bgColor: #ECFBFB;
   .line {
     display: flex;
     margin-bottom: 40px;
-<<<<<<< HEAD
+    animation: leftIn .5s linear forwards;
     //overflow: hidden;
     //box-sizing: border-box;
     box-shadow: 1px 1px 12px transparent;
-=======
+
     overflow: hidden;
     box-sizing: border-box;
->>>>>>> 326b59aa53e211a6e29b8a033e45707b234981e4
+
     transition: all .3s ease;
 
     img {
@@ -169,10 +176,10 @@ $bgColor: #ECFBFB;
 
   .line:hover {
     box-shadow: 1px 1px 12px $aColor;
-<<<<<<< HEAD
+
     transform: scale(1.1);
-=======
->>>>>>> 326b59aa53e211a6e29b8a033e45707b234981e4
+
+
     border-radius: 10px;
     padding: 5px;
   }

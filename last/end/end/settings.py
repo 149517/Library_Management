@@ -40,12 +40,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'user',
-<<<<<<< HEAD
     'books',
     'record'
-=======
-    'books'
->>>>>>> 326b59aa53e211a6e29b8a033e45707b234981e4
 ]
 
 MIDDLEWARE = [

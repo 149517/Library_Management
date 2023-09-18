@@ -1,11 +1,13 @@
 <script>
 import {mapState} from "vuex";
+import axios from "axios";
 
 export default {
   data() {
     return {
       // 判断是否登录，如果localStore中含有token和pic则认为是登录状态
       login: false,
+      out:false,
       link: [
         {
           id: 1,
@@ -32,7 +34,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['name', 'picUrl'])
+    ...mapState(['name', 'picUrl','baseUrl'])
   },
   methods: {
     getPic() {
@@ -41,6 +43,34 @@ export default {
         this.$store.commit('setPicUrl', pic)
         this.login = true
       }
+    },
+    logout(){
+        let ele = this.$refs.logout;
+        if(this.out){
+          ele.classList.remove('enter')
+          this.out = false
+        }else{
+          ele.classList.add('enter')
+          this.out = true
+        }
+    },
+    exit(){
+      if(confirm("是否确定退出？")){
+        let url = this.baseUrl + '/user/logout/'
+        axios.get(url)
+            .then((res)=>{
+              localStorage.removeItem('pic');
+              localStorage.removeItem('token');
+              // alert(res.data.msg)
+              location.reload()
+            })
+            .catch((err)=>{
+              console.log(err)
+            })
+      }
+    },
+    fix(){
+
     }
   },
   watch:{
@@ -65,8 +95,6 @@ export default {
 <template>
 
   <div class="container">
-
-
     <div class="top">
       <div class="logo">
         <!--        曦林图书-->
@@ -81,8 +109,16 @@ export default {
           <router-link to="/login">Sign in</router-link>
           <div></div>
         </div>
-        <div class="person" v-else>
+        <div class="person" v-else @click="logout()">
           <img :src="picUrl" alt="">
+          <div class="logout" ref="logout">
+            <div class="out" @click.stop="exit()">
+              退出登录
+            </div>
+            <div class="fix" @click.stop="fix()">
+              账户修改
+            </div>
+          </div>
         </div>
 
       </div>
@@ -96,8 +132,6 @@ $btnColor: #38B081;
 $bgColor: #ECFBFB;
 
 .container{
-  //box-shadow: 1px 0 5px #38b0815c;
-  //margin: 0;
 }
 .top {
   height: 80px;
@@ -120,11 +154,38 @@ $bgColor: #ECFBFB;
   }
 
   .person {
+    position: relative;
+    top: 0;
+    left: 0;
     img {
       width: 40px;
       height: 40px;
       border-radius: 20px;
       vertical-align: middle;
+    }
+    .logout{
+      position: absolute;
+      top: 54px;
+      right: -60px;
+      z-index: 9;
+      opacity: 0;
+      width: 100px;
+      height: 80px;
+      transition: all .5s ease;
+      div{
+        cursor: pointer;
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+        margin-top: 5px;
+        color: white;
+        border-radius: 10px;
+        background: $btnColor;
+      }
+    }
+    .enter{
+      right: -10px;
+      opacity: 1;
     }
   }
 
@@ -133,7 +194,6 @@ $bgColor: #ECFBFB;
 
     div {
       line-height: 50px;
-      overflow: hidden;
       transition: all .3s linear;
 
       span {

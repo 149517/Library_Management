@@ -9,7 +9,6 @@ import json
 
 from books.models import Book
 from user.models import UserInfo
-
 from record.models import Record
 
 
@@ -30,8 +29,14 @@ def borrow_view(request):
         isbn = request.data.get('isbn')
         type = request.data.get('type')
         user_id = request.user.id  # 从令牌中解析出user_id
-        print(isbn,type,user_id)
+        # print(isbn,type,user_id)
 
+        # 在数据库中查找是否已存在匹配的记录
+        existing_record = Record.objects.filter(user_id=user_id, book__isbn=isbn, type=type).first()
+
+        if existing_record:
+            # 如果已存在匹配记录，则返回相应的错误消息
+            return Response({'error': 'Record already exists'}, status=status.HTTP_400_BAD_REQUEST)
         # 在Book模型中查找具有匹配ISBN的书籍记录
         try:
             book = Book.objects.get(isbn=isbn)

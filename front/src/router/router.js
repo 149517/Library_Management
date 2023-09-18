@@ -5,6 +5,7 @@ import BookList from "../components/secondary/bookList.vue";
 import Borrowing from "../components/secondary/borrowing.vue";
 import Table from "../components/secondary/table.vue"
 import Details from "../components/secondary/details.vue";
+import FixBook from "../components/secondary/fixBook.vue";
 
 
 const router = createRouter({
@@ -14,7 +15,12 @@ const router = createRouter({
         {path: '/login', component: Login},
         {path: '/bookList', component: BookList},
         {path: '/borrowing', component: Borrowing,meta: {requiresAuth: true}},
-        {path: '/table', component: Table, meta: {requiresAuth: true}},
+        {path: '/table', component: Table,
+            meta: {requiresAuth: true},
+            children:[
+                {path:'fixBook',component:FixBook}
+            ]
+        },
         // meta: {requiresAuth: true} 需要身份认证的路由
         {path:'/details',component:Details,meta:{requiresAuth: true}}
     ],

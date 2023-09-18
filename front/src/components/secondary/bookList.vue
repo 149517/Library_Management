@@ -56,9 +56,9 @@ export default {
         }
       } else if (type === 'down') {
 
-        if (this.page === this.pagination_info.total_pages) {
+        if (this.page <= this.pagination_info.total_pages) {
 
-          if (this.page === 3) {
+          if (this.page === this.pagination_info.total_pages) {
             return false
           } else {
             this.page = this.page + 1
@@ -69,7 +69,7 @@ export default {
       }
 
     },
-    open(item){
+    open(item) {
       // console.log(item)
       let isbn = item.fields.isbn
       this.$router.push(`/details/?isbn=${isbn}`)
@@ -138,8 +138,6 @@ $bgColor: #ECFBFB;
     display: flex;
     margin-bottom: 40px;
     animation: leftIn .5s linear forwards;
-    //overflow: hidden;
-    //box-sizing: border-box;
     box-shadow: 1px 1px 12px transparent;
 
     overflow: hidden;
@@ -176,17 +174,17 @@ $bgColor: #ECFBFB;
 
   .line:hover {
     box-shadow: 1px 1px 12px $aColor;
-
     transform: scale(1.1);
-
-
     border-radius: 10px;
     padding: 5px;
+    img{
+      border-radius: 8px;
+    }
   }
 }
 
 .paging {
-  width: 400px;
+  width: 600px;
   margin: auto;
 
   button {

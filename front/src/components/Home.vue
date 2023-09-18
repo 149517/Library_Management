@@ -2,13 +2,9 @@
 export default {
 
   data() {
-    return {
-
-    }
+    return {}
   },
-  methods: {
-
-  },
+  methods: {},
 
 
 }
@@ -25,7 +21,9 @@ export default {
       </div>
       <div class="image">
         <img class='left' src="../assets/images/banner-left.png" alt="">
-        <img class='middle' src="../assets/images/banner3.png" alt="">
+        <div class="middle">
+          <img src="../assets/images/banner3.png" alt="">
+        </div>
         <img class='right' src="../assets/images/banner-right.png" alt="">
       </div>
     </div>
@@ -43,9 +41,7 @@ $bgColor: #ECFBFB;
 
 .banner {
   width: 100%;
-  //height: calc(100vh - 80px * 2);
   overflow: hidden;
-  padding: 20px 0;
   border-radius: 20px;
   background: $bgColor;
   text-align: center;
@@ -60,7 +56,7 @@ $bgColor: #ECFBFB;
     }
   }
 
-  .des{
+  .des {
     opacity: 0;
     animation: downIn .5s ease-in forwards;
     animation-delay: .6s;
@@ -77,15 +73,19 @@ $bgColor: #ECFBFB;
     justify-content: space-between;
 
     .right,
-    .left{
+    .left {
       transition: all .4s ease;
       transform: scale(1);
     }
 
     .middle {
-      transition: all .4s ease;
       animation: upMove .5s linear forwards;
-      &:hover{
+
+      img {
+        transition: all .4s ease;
+      }
+
+      img:hover {
         transform: scale(1.1);
       }
     }

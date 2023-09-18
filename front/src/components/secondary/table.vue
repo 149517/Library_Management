@@ -39,6 +39,7 @@ export default {
         this.borrow = false;
         this.buy = false
         this.fix = true
+        this.$router.push('/table/fixBook')
       }
     },
     getRecord(type) {
@@ -48,8 +49,6 @@ export default {
       axios
           .post(url, formData)
           .then((res) => {
-            // console.log(res.data)
-            // console.log(res.data.records)
             this.borrowData = res.data.records
           })
           .catch((err) => {
@@ -74,7 +73,7 @@ export default {
 
     </div>
     <div class="content">
-      <div class="borrow_view" v-if="borrow">
+      <div class="view" v-if="borrow">
         <table>
           <thead>
           <tr>
@@ -99,7 +98,7 @@ export default {
         </table>
       </div>
 
-      <div class="buy_view" v-if="buy">
+      <div class="view" v-if="buy">
         <table>
           <thead>
           <tr>
@@ -124,8 +123,8 @@ export default {
         </table>
       </div>
 
-      <div class="fix_view" v-if="fix">
-        <h2>暂未开启</h2>
+      <div class="view" v-if="fix">
+        <router-view></router-view>
       </div>
     </div>
   </div>
@@ -171,8 +170,11 @@ $bgColor: #ECFBFB;
   margin-left: 30px;
   width: calc(100% - 80px * 2 - 30px);
   height: 500px;
-  .borrow_view{
-    //padding: 30px 0;
+  .view{
+    opacity: 0;
+    transition: all .5s linear;
+    animation: downIn .3s ease-in forwards;
+    //animation: upMove .3s ease-in forwards;
   }
   table{
     border-spacing: 3px;

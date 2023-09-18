@@ -8,7 +8,7 @@ import json
 
 
 def all_view(request):
-    books = Book.objects.all()
+    books = Book.objects.all().order_by('id')
     paginator = Paginator(books, 4)
 
     page_number = request.GET.get('page', 1)

@@ -1,11 +1,15 @@
-from django.contrib.auth.models import User
-from user.models import UserInfo
-from django.contrib.auth import authenticate, login
 from django.http import JsonResponse
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework import status
+
+from user.models import UserInfo
+from django.contrib.auth import authenticate, login, logout
+from django.http import JsonResponse, HttpResponse
 
 from rest_framework.authtoken.models import Token
-
-from rest_framework.decorators import api_view
 
 
 @api_view(['POST'])
@@ -65,3 +69,32 @@ def register_view(request):
             # 创建用户
             UserInfo.objects.create_user(username=username, password=password)
             return JsonResponse({'code': 201, 'msg': '用户创建成功'})
+
+
+def logout_view(request):
+    logout(request)
+    return JsonResponse({'code': 200, 'msg': '退出登录'})
+
+
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def manage_view(request):
+    if request.method == 'POST':
+        user_id = request.user.id  # 从令牌中解析出user_id
+        # 获取用户对象，如果不存在则返回404错误页面
+        print(user_id)
+        try:
+            user = UserInfo.objects.get(id=user_id)
+        except UserInfo.DoesNotExist:
+            return JsonResponse({'code': 404, "msg": "当前用户不存在"})
+
+        # 检查用户是否具有管理权限
+        if user.is_staff:
+            # 如果用户具有管理权限，执行相应的操作
+            # 例如，返回一个成功的响应或执行其他逻辑
+            return JsonResponse({'code': 200, "msg": "用户具有管理权限"})
+        else:
+            # 如果用户没有管理权限，执行相应的操作
+            # 例如，返回一个错误的响应或执行其他逻辑
+            return JsonResponse({'code': 401, "msg": "用户权限不足"})

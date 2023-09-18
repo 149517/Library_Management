@@ -26,7 +26,10 @@ export default {
     }
   },
   computed: {
-    ...mapState(['baseUrl'])
+    ...mapState(['baseUrl']),
+    shouldShowIntro() {
+      return this.book.intro !== '';
+    }
   },
   methods: {
     getData() {
@@ -113,10 +116,10 @@ export default {
             <p>类型：<span>{{ book.type }}</span></p>
             <p>出版社：<span>{{ book.publisher }}</span></p>
             <p>ISBN：<span>{{ book.isbn }}</span></p>
-            <p>出版日期：<span>{{ book.Listing_time }}</span></p>
+            <p>出版日期：<span>{{ book.Listing_time.split('T')[0] }}</span></p>
           </div>
         </div>
-        <p class="intro">介绍：<span>{{ book.intro }}</span></p>
+        <p class="intro" v-if="shouldShowIntro">介绍：<span>{{ book.intro }}</span></p>
       </div>
     </div>
   </div>
@@ -171,8 +174,8 @@ $bgColor: #ECFBFB;
     }
   }
   .op{
-    width: 200px;
-    height: 200px;
+    width: 180px;
+    height: 160px;
     border-radius: 10px;
     display:flex;
     flex-direction: column;
@@ -181,14 +184,15 @@ $bgColor: #ECFBFB;
     right: 80px;
     .bor{
       text-align: center;
-      line-height: 100px;
+      line-height: 80px;
       flex: 1;
       background: #9bdec9;
       border-radius: 8px;
+      margin-bottom: 10px;
     }
     .buy{
       text-align: center;
-      line-height: 100px;
+      line-height: 80px;
       flex: 1;
       background: #79dbea;
       border-radius: 8px;

@@ -139,7 +139,12 @@ CORS_ORIGIN_WHITELIST = (
 
 CORE_ALLOW_METHODS = ('DELETE', 'GET', 'POST', 'PUT')
 
+CORS_ALLOWED_ORIGINS = [
+    "http://10.218.39.118:5173",  # 允许跨域请求的前端应用的域名
+]
+
 CORS_ALLOW_HEADERS = (
+    "content-type",
     'XMLHttpRequest',
     'x_FILENAME',
     'accept-encoding',

@@ -11,24 +11,23 @@ export default {
       link: [
         {
           id: 1,
-          name: "数字图书",
-          href: "#"
-        },
-        {
-          id: 2,
           name: "热门必读",
           href: "/bookList"
         },
         {
-          id: 3,
+          id: 2,
           name: "借阅",
           href: "/borrowing"
         },
         {
-          id: 4,
-          name: "查询和申报",
-
+          id: 3,
+          name: "用户记录",
           href: "/table"
+        },
+        {
+          id: 4,
+          name: "数据申报",
+          href: "/modify"
         },
       ]
     }

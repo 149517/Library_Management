@@ -28,18 +28,15 @@ export default {
       if (type === 'borrow') {
         this.borrow = true;
         this.buy = false
-        this.fix = false
         this.getRecord('borrow')
       } else if (type === 'buy') {
         this.borrow = false;
         this.buy = true
-        this.fix = false
         this.getRecord('buy')
       } else {
         this.borrow = false;
         this.buy = false
-        this.fix = true
-        this.$router.push('/table/fixBook')
+
       }
     },
     getRecord(type) {
@@ -122,10 +119,6 @@ export default {
           </tbody>
         </table>
       </div>
-
-      <div class="view" v-if="fix">
-        <router-view></router-view>
-      </div>
     </div>
   </div>
 
@@ -194,12 +187,6 @@ $bgColor: #ECFBFB;
         border-radius: 5px;
       }
     }
-  }
-  .fix_view{
-    padding: 50px 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
   }
 }
 </style>

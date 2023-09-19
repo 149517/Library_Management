@@ -83,7 +83,7 @@ def manage_view(request):
     if request.method == 'POST':
         user_id = request.user.id  # 从令牌中解析出user_id
         # 获取用户对象，如果不存在则返回404错误页面
-        print(user_id)
+        # print(user_id)
         try:
             user = UserInfo.objects.get(id=user_id)
         except UserInfo.DoesNotExist:

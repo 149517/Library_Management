@@ -5,7 +5,7 @@ class Book(models.Model):
     bookname = models.CharField('书名', max_length=64)
     author = models.CharField("作者", max_length=64)
     isbn = models.CharField('ISBN', unique=True, max_length=20)
-    Listing_time = models.DateTimeField("出版时间")
+    Listing_time = models.DateField("出版时间")
     updated_time = models.DateTimeField("添加时间", auto_now_add=True)
     type = models.CharField("类型", max_length=32)
     lang = models.CharField("语言", max_length=32)

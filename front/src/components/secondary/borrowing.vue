@@ -80,7 +80,6 @@ export default {
             }
             this.books = res.data.books
             this.play = true
-
           })
           .catch((err) => {
             console.log("数据提交失败" + err)

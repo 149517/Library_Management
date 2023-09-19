@@ -1,5 +1,35 @@
 #  图书管理系统
 
+
+
+##  项目概览
+
+####  登录注册
+
+* 在一个页面中切换UI，使页面切换更流畅。
+
+![image-20230919140639903](./assets/image-20230919140639903.png)
+
+![image-20230919140658337](./assets/image-20230919140658337.png)
+
+####  Home
+
+![image-20230919140857132](./assets/image-20230919140857132.png)
+
+#### 图书列表
+
+![image-20230919140903845](./assets/image-20230919140903845.png)
+
+####  记录查询
+
+![image-20230919140911066](./assets/image-20230919140911066.png)
+
+
+####  数据修改
+
+![image-20230919140915498](./assets/image-20230919140915498.png)
+
+
 ###  项目介绍
 
 通过 Vue.js + Django 搭建前后端分离的图书管理系统。
@@ -20,6 +50,15 @@
 2. 实现图书数据的获取和刷新，书籍信息的分页展示
 3. 实现图书的查询，用户书籍信息的添加（购买和借阅）
 4. 个人用户书籍信息的查询（购买和借阅）
+
+
+
+* 2023-09-19
+
+1. 修改了登录注册时候验证token，无法请求的问题
+2. 增加了部分数据
+3. 添加了数据的修改和增加（管理用户）
+4. 优化部分UI
 
 
 
@@ -55,12 +94,13 @@
 
 * 用户系统（内建用户，继承内部抽象类进行拓展）
 * 书籍
+* 记录
 
 
 
-####  项目规划
+####  项目大纲
 
-![image-20230904231944119](./assets/image-20230904231944119.png)
+![image-20230919135734670](./assets/image-20230919135734670.png)
 
 
 
@@ -138,7 +178,12 @@ CORS_ORIGIN_WHITELIST = (
 
 CORE_ALLOW_METHODS = ('DELETE', 'GET', 'POST', 'PUT')
 
+CORS_ALLOWED_ORIGINS = [
+    "http://10.218.39.118:5173",  # 允许跨域请求的前端应用的域名
+]
+
 CORS_ALLOW_HEADERS = (
+    "content-type",
     'XMLHttpRequest',
     'x_FILENAME',
     'accept-encoding',
@@ -150,6 +195,7 @@ CORS_ALLOW_HEADERS = (
     'x-requested-with',
     'Pragma'
 )
+
 ```
 
 
@@ -355,7 +401,7 @@ def register_view(request):
 
 > py manage.py startapp books;
 
-
+* books,record
 
 ####  图书数据模型
 
@@ -367,43 +413,31 @@ class Book(models.Model):
     bookname = models.CharField('书名', max_length=64)
     author = models.CharField("作者", max_length=64)
     isbn = models.CharField('ISBN', unique=True, max_length=20)
-    Listing_time = models.DateTimeField("出版时间")
+    Listing_time = models.DateField("出版时间")
     updated_time = models.DateTimeField("添加时间", auto_now_add=True)
     type = models.CharField("类型", max_length=32)
     lang = models.CharField("语言", max_length=32)
     publisher = models.CharField("出版社", max_length=32)
     price = models.DecimalField("定价", max_digits=8, decimal_places=2)
     intro = models.CharField("描述", default="", max_length=512)
-    # 封面来自微信读书链接，通过下载图片到服务器，通过ISBN进行索引
     pic = models.CharField("封面", default='',max_length=64)
-
 ```
 
 
 
-####  数据返回
+####  记录数据模型
 
 ```py
-from books.models import Book
-from django.http import HttpResponse, JsonResponse
-
-
-def all_view(request):
-    # 接收 GET 请求
-    if request.method == 'GET':
-        # 查询所有数据
-        # 在查询中使用了 .values() 方法来将查询结果转换为字典列表
-        books = list(Book.objects.all().values())
-        # 在数据前面添加一个code：200
-        data = {
-            'code': 200,
-            'data': books
-        }
-        # 将 safe 参数设置为 False，因为我们返回的是一个列表，而不是一个字典。这允许返回一个非字典类型的 JSON 响应。
-        # 将 json_dumps_params 参数设置为 {'ensure_ascii': False}，你告诉 Django 在将 Python 数据转换为 JSON 字符串时不要转义非 				ASCII 字符，这将确保中文字符正确地显示在返回的 JSON 中，而不会出现乱码。
-        return JsonResponse(data, safe=False, json_dumps_params={'ensure_ascii': False})
+class Record(models.Model):
+    user = models.ForeignKey('user.UserInfo', on_delete=models.CASCADE)
+    # 使用ForeignKey关联User模型中的id字段
+    type = models.CharField("记录类型", max_length=12)
+    book = models.ForeignKey('books.Book', on_delete=models.CASCADE)
+    status = models.BooleanField("状态", default=True)
+    addTime = models.DateTimeField("添加时间", auto_now_add=True)
 
 ```
+
 
 
 
@@ -417,25 +451,6 @@ def all_view(request):
 
 * Paginator，Django自带的分页查询工具
 * serializeres，json，用于QuerySet对象的序列化，因为是前后端分离项目，返回JsonResponse对象时候需要进行序列化
-
-
-
-####   原代码
-
-* 直接返回所有的数据
-
-```py
-def all_view(request):
-    if request.method == 'GET':
-        books = list(Book.objects.all().values())
-        data = {
-            'code': 200,
-            'books': books
-        }
-        return JsonResponse(data, safe=False, json_dumps_params={'ensure_ascii': False})
-```
-
-
 
 ####  分页
 
@@ -546,53 +561,11 @@ export default router;
 
 3. 添加 JS 动画，但是没有执行效果。
 
-   ```vue
-   methods:{
-   	    spanAnimation(flag,index){
-         let op = this.$refs.op[index-1];
-         console.log(op)
-         // if(op){
-         //   console.log("元素没找到")
-         //   return
-         // }
-         if(flag){
-           op.style.animation = 'leftIn .3s linear forwards';
-         }else{
-           op.style.animation = 'leftIn .3s linear forwards';
-           op.style.animationDirection = "alternate";
-         }
-       }
-   }
-   
-   
-   <div v-for="item in link" key="item.id" @mouseenter="spanAnimation(true,item.id)" 				      @mouseleave="spanAnimation(false,item.id)">
-      <a :href="item.href">{{item.name}}</a>
-      <span ref="op"></span>
-   </div>
-   ```
-
 4. 在后续实践中，无法使用。事件无法触发
 
 5. 故而采用，width和transition的方式实现动画
 
-```vue
-      div{
-        position: absolute;
-        top: 0;
-        left: 0;
-        z-index: -1;
-        height: 100%;
-        width: 0;
-        background: $btnColor;
-      }
-    }
-    .login:hover div{
-      width: 100%;
-    }
-    .login:hover a{
-      color: white;
-    }
-```
+
 
 
 
@@ -706,83 +679,6 @@ export default {
             console.log("数据提交失败" + err)
           })
     },
-    axiosRegister(url, formData) {
-      axios
-          .post(url, formData)
-          .then(res => {
-            if (res.data.code === 201) {
-              if (confirm(res.data.msg + "，是否直接登录")) {
-                this.submitForm('login')
-              } else {
-                this.login = false;
-              }
-            } else {
-              alert(res.data.msg)
-            }
-          })
-          .catch(err => {
-            console.log("数据提交失败" + err)
-          })
-    }
-  },
-  watch: {
-    uname(newValue) {
-      if (newValue.length < 4) {
-        this.unameTip = '用户名过短'
-      } else if (newValue.length > 30) {
-        this.unameTip = '用户名过长'
-      } else {
-        this.unameTip = ""
-      }
-    },
-    // password 略
-  }
-}
-
-</script>
-
-<template>
-  <div class="container">
-    <div class="mid">
-      <div class="left">
-        <img class="img" src="../../assets/images/login/02.jpg" alt="">
-      </div>
-      <div class="right">
-        <div class="login_bg">
-          <div class="top">
-            <div class="head">
-              <router-link to="/">返回首页</router-link>
-              <a href="javascript:void(0)" @click="Jump()" v-if="login">注册</a>
-              <a href="javascript:void(0)" @click="Jump()" v-else>登录</a>
-            </div>
-            <h2 v-if="login">用户登录</h2>
-            <h2 v-else>注册新用户</h2>
-          </div>
-          <form :action="baseUrl+'/user/login/'" ref="login" method="post" v-if="login"
-                @submit.prevent="check('login')">
-            <div class="box">
-              <label>
-                账号：<input type="text" v-model="uname" name="uname" id="uname">
-              </label>
-              <div>{{ unameTip }}</div>
-            </div>
-            <div class="box">
-              <label class="pass">
-                密码：<input :type="psV ? 'password' : 'text' " v-model="password" name="password" id="password">
-                <div @click="psV = !psV">
-                  <img v-if="!psV" src="../../assets/icon/visible.png" alt="">
-                  <img v-else src="../../assets/icon/invisible.png" alt="">
-                </div>
-              </label>
-              <div>{{ passwordTip }}</div>
-            </div>
-            <label>
-              <button id="submit" type="submit">登录</button>
-            </label>
-          </form>
-        </div>
-
-      </div>
     </div>
   </div>
 </template>
@@ -802,103 +698,13 @@ export default {
 * 通过按钮点击传递数据
 * 通过`disabled`控制按钮是否能够点击
 
-#####  代码
-
-```html
-      <div class="paging">
-        <button :disabled="!pagination_info.has_previous" @click="fixPage('up')">上一页</button>
-        <button class="li" :class="{'li_active': pagination_info.current_page === (index+1)}"
-                v-for="(item,index) in pagination_info.total_pages"
-                @click="fixPage(index+1)">{{ index + 1 }}
-        </button>
-        <button @click="fixPage('down')" :disabled="!pagination_info.has_next">下一页</button>
-      </div>
-```
-
 
 
 #####  整体实现
 
 * 通过data数据，监听page的修改，修改后就发送一次请求，获取当页的数据
 
-```vue
-<script>
-import axios from "axios";
-import {mapState} from "vuex";
 
-export default {
-  data() {
-    return {
-      pagination_info: {
-        total_pages: 0,
-        current_page: 0,
-        has_next: true,
-        has_previous: false
-      },
-      page: 1,
-    }
-  },
-  methods: {
-    getBooks() {
-      let url = this.baseUrl + `/books/all/?page=${this.page}`
-      axios.get(url)
-          .then((res) => {
-            this.books = res.data.data
-            this.pagination_info = res.data.pagination_info
-          })
-          .catch((err) => {
-            console.log("数据请求失败" + err)
-          })
-    },
-    fixPage(type){
-      if(type === 'up'){
-        if(this.page === 1){
-          return false
-        }else {
-          this.page = this.page -1
-        }
-      }else if(type === 'down'){
-        if(this.page === 3){
-          return false
-        }else {
-          this.page = this.page + 1
-        }
-      }else{
-        this.page = type
-      }
-    }
-  },
-  watch:{
-    page(newValue){
-      this.getBooks()
-    }
-  },
-  mounted() {
-    this.getBooks()
-  }
-}
-</script>
-
-<template>
-  <div class="container">
-    <div class="bg">
-      <div class="box">
-        <div class="line" v-for="item in books" key="item.id">
-          <!==数据==>
-        </div>
-      </div>
-      <div class="paging">
-        <button :disabled="!pagination_info.has_previous" @click="fixPage('up')">上一页</button>
-        <button class="li" :class="{'li_active': pagination_info.current_page === (index+1)}"
-                v-for="(item,index) in pagination_info.total_pages"
-                @click="fixPage(index+1)">{{ index + 1 }}
-        </button>
-        <button @click="fixPage('down')" :disabled="!pagination_info.has_next">下一页</button>
-      </div>
-    </div>
-  </div>
-</template>
-```
 
 
 
@@ -914,16 +720,26 @@ export default {
 
 ###  书籍信息添加（手动）
 
-
 **使用的是 Django的admin后台管理系统**
 
 ####  超级用户的创建
 
 `py manage.py createsuperuser`
 
+* 添加超级用户后才能进行书籍信息的修改，需要权限
 
 
-####  将自己的类注册到后台管理界面
+
+####  书籍数据导入
+
+* 通过在MySQL中创建 'library' 数据库
+* 继承用户抽象类
+* 在Python中进行数据迁移后
+* 然后添加`books_book.sql`
+
+
+
+####  后台管理界面查看数据
 
 **注册步骤**
 

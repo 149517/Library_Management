@@ -7,7 +7,6 @@ export default {
     return {
       borrow: true,
       buy: false,
-      fix: false,
       borrowData: [{
         time:'',
         book: {
@@ -65,7 +64,6 @@ export default {
       <div class="block bg">
         <h2 :class="{'active':borrow}" @click="toggle('borrow')">我的借阅</h2>
         <h2 :class="{'active':buy}" @click="toggle('buy')">购书记录</h2>
-        <h2 :class="{'active':fix}" @click="toggle('fix')">错误修订</h2>
       </div>
 
     </div>
